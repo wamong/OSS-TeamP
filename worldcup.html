@@ -3,25 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>이상형 월드컵 생성기</title>
+  <title>이상형 월드컵</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Nanum Gothic', sans-serif;
+      font-family: 'Arial', sans-serif;
       background-color: #f8f9fa;
+      text-align: center;
       padding: 20px;
     }
-    .candidate-container {
+    .match-container {
       display: flex;
-      flex-wrap: wrap;
       justify-content: center;
+      align-items: center;
       gap: 20px;
+      position: relative;
+      height: 300px;
     }
     .candidate-card {
-      width: 150px;
-      height: 150px;
-      position: relative;
+      width: 200px;
+      height: 200px;
       overflow: hidden;
       border: 2px solid transparent;
       border-radius: 10px;
@@ -33,125 +34,100 @@
       height: 100%;
       object-fit: cover;
     }
-    .candidate-card.selected {
-      transform: scale(1.1);
+    .candidate-card:hover {
       border-color: #007bff;
     }
-    .selected-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-      margin: 20px 0;
+    .candidate-card.selected {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1.5);
+      z-index: 10;
+      border-color: #28a745;
+      transition: transform 0.6s, border-color 0.6s;
     }
-    .selected-container .candidate-card {
-      transform: scale(1.2);
-      transition: transform 0.3s, border-color 0.3s;
-    }
-    .btn-next-round {
-      display: none;
+    #winner {
       margin-top: 20px;
-    }
-    .btn-next-round.active {
-      display: inline-block;
+      display: none;
+      font-size: 24px;
+      font-weight: bold;
+      color: #28a745;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1 class="text-center my-4">이상형 월드컵</h1>
-
-    <!-- 대회 진행 -->
-    <div id="tournament-container" class="candidate-container"></div>
-    <div id="selected-container" class="selected-container"></div>
-    <button id="next-round-btn" class="btn btn-primary btn-next-round" onclick="playNextRound()">다음 라운드 진행</button>
-  </div>
+  <h1>이상형 월드컵</h1>
+  <div id="match-container" class="match-container"></div>
+  <div id="winner">우승: <span id="winner-name"></span></div>
 
   <script>
-    let tournament = {
-      title: '이상형 월드컵',
-      currentRound: [],
-      nextRound: [],
-    };
-
     // 예제 후보
     const candidates = [
-      { name: '후보 1', photo: 'https://via.placeholder.com/150' },
-      { name: '후보 2', photo: 'https://via.placeholder.com/150' },
-      { name: '후보 3', photo: 'https://via.placeholder.com/150' },
-      { name: '후보 4', photo: 'https://via.placeholder.com/150' },
+      { name: '후보 1', photo: 'https://via.placeholder.com/200' },
+      { name: '후보 2', photo: 'https://via.placeholder.com/200/FF0000' },
+      { name: '후보 3', photo: 'https://via.placeholder.com/200/00FF00' },
+      { name: '후보 4', photo: 'https://via.placeholder.com/200/0000FF' },
     ];
 
-    function startTournament() {
-      tournament.currentRound = [...candidates];
-      renderCandidates();
-    }
-
-    function renderCandidates() {
-      const container = document.getElementById('tournament-container');
-      const selectedContainer = document.getElementById('selected-container');
-      container.innerHTML = '';
-      selectedContainer.innerHTML = '';
-
-      tournament.currentRound.forEach((candidate, index) => {
-        const div = document.createElement('div');
-        div.className = 'candidate-card';
-        div.dataset.index = index;
-        div.innerHTML = `
-          <img src="${candidate.photo}" alt="${candidate.name}">
-        `;
-        div.onclick = () => selectCandidate(index);
-        container.appendChild(div);
-      });
-    }
-
-    function selectCandidate(index) {
-      const selectedCards = document.querySelectorAll('.candidate-card.selected');
-      if (selectedCards.length >= 2) return; // 최대 2장만 선택 가능
-
-      const card = document.querySelector(`.candidate-card[data-index="${index}"]`);
-      if (!card.classList.contains('selected')) {
-        card.classList.add('selected');
-        moveToSelected(index);
-      }
-    }
-
-    function moveToSelected(index) {
-      const candidate = tournament.currentRound[index];
-      const selectedContainer = document.getElementById('selected-container');
-      const div = document.createElement('div');
-      div.className = 'candidate-card';
-      div.innerHTML = `
-        <img src="${candidate.photo}" alt="${candidate.name}">
-      `;
-      selectedContainer.appendChild(div);
-
-      // 2장 선택 시 다음 라운드 버튼 활성화
-      if (selectedContainer.children.length === 2) {
-        document.getElementById('next-round-btn').classList.add('active');
-      }
-    }
-
-    function playNextRound() {
-      const selectedContainer = document.getElementById('selected-container');
-      const selectedCards = Array.from(selectedContainer.children);
-
-      // 다음 라운드에 선택된 후보 추가
-      tournament.nextRound = selectedCards.map(card => {
-        const img = card.querySelector('img');
-        const name = img.alt;
-        const photo = img.src;
-        return { name, photo };
-      });
-
-      // 다음 라운드로 전환
-      tournament.currentRound = [...tournament.nextRound];
-      tournament.nextRound = [];
-      document.getElementById('next-round-btn').classList.remove('active');
-      renderCandidates();
-    }
+    let currentRound = [];
+    let nextRound = [];
 
     // 대회 시작
+    function startTournament() {
+      currentRound = [...candidates];
+      showMatch();
+    }
+
+    // 일대일 매치 화면 표시
+    function showMatch() {
+      const matchContainer = document.getElementById('match-container');
+      matchContainer.innerHTML = '';
+
+      if (currentRound.length === 1) {
+        // 우승자가 나왔을 때
+        document.getElementById('winner-name').textContent = currentRound[0].name;
+        document.getElementById('winner').style.display = 'block';
+        return;
+      }
+
+      const [first, second] = currentRound.splice(0, 2);
+
+      [first, second].forEach((candidate, index) => {
+        const div = document.createElement('div');
+        div.className = 'candidate-card';
+        div.innerHTML = `<img src="${candidate.photo}" alt="${candidate.name}">`;
+        div.onclick = () => selectWinner(candidate, index === 0 ? second : first);
+        matchContainer.appendChild(div);
+      });
+    }
+
+    // 사용자가 후보를 선택했을 때
+    function selectWinner(winner, loser) {
+      const matchContainer = document.getElementById('match-container');
+      const cards = matchContainer.querySelectorAll('.candidate-card');
+
+      // 선택된 후보에 애니메이션 추가
+      cards.forEach((card, index) => {
+        if (card.querySelector('img').alt === winner.name) {
+          card.classList.add('selected');
+        } else {
+          card.style.opacity = '0';
+          card.style.transition = 'opacity 0.6s';
+        }
+      });
+
+      // 애니메이션 후 다음 라운드로 진행
+      setTimeout(() => {
+        nextRound.push(winner);
+        if (currentRound.length === 0) {
+          currentRound = [...nextRound];
+          nextRound = [];
+        }
+        showMatch();
+      }, 1000);
+    }
+
+    // 대회 초기화 및 시작
     startTournament();
   </script>
 </body>
