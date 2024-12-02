@@ -2,9 +2,11 @@ import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
 from PIL import Image, ImageTk
+import random
 
 # 후보 리스트를 담을 변수
 candidates = []
+selected_images = []
 
 # 이미지 업로드 함수
 def upload_images():
@@ -14,32 +16,33 @@ def upload_images():
             image = Image.open(file_path)
             image.thumbnail((200, 200))  # 이미지 크기 조정
             image_tk = ImageTk.PhotoImage(image)
-            candidate_entry_frame(file_path, image_tk)
+            selected_images.append({'image': image_tk, 'image_path': file_path})
+        update_selected_images()
 
-# 후보 이름과 이미지 미리보기 추가
-def candidate_entry_frame(image_path, image_tk):
-    # 이미지와 이름을 입력할 프레임
-    frame = tk.Frame(scrollable_frame)
-    frame.pack(pady=10)
+# 선택된 이미지 목록 업데이트
+def update_selected_images():
+    for widget in selected_image_frame.winfo_children():
+        widget.destroy()
+    
+    for image in selected_images:
+        frame = tk.Frame(selected_image_frame)
+        frame.pack(pady=10)
 
-    # 이미지 미리보기
-    label_image = tk.Label(frame, image=image_tk)
-    label_image.image = image_tk  # 이미지 참조를 유지
-    label_image.pack(side=tk.LEFT)
+        label_image = tk.Label(frame, image=image['image'])
+        label_image.image = image['image']  # 이미지 참조 유지
+        label_image.pack(side=tk.LEFT)
 
-    # 이름 입력란
-    name_entry = tk.Entry(frame, font=("Arial", 12))
-    name_entry.pack(side=tk.LEFT, padx=10)
+        name_entry = tk.Entry(frame, font=("Arial", 12))
+        name_entry.pack(side=tk.LEFT, padx=10)
 
-    # 후보 추가 버튼
-    add_button = tk.Button(frame, text="후보 추가", command=lambda: add_candidate(name_entry, image_path, image_tk))
-    add_button.pack(side=tk.LEFT)
+        add_button = tk.Button(frame, text="후보 추가", command=lambda img=image, entry=name_entry: add_candidate(img, entry))
+        add_button.pack(side=tk.LEFT)
 
 # 후보 추가 함수
-def add_candidate(name_entry, image_path, image_tk):
+def add_candidate(image, name_entry):
     name = name_entry.get()
     if name:
-        candidates.append({'name': name, 'image': image_tk, 'image_path': image_path})
+        candidates.append({'name': name, 'image': image['image'], 'image_path': image['image_path']})
         listbox.insert(tk.END, name)  # 후보 이름을 리스트 박스에 추가
         update_candidates_list()
 
@@ -97,57 +100,86 @@ def save_tournament():
     # 대회 저장하기
     pass
 
+# 사진 저장 함수
+def save_image_to_left(image, name_entry):
+    name = name_entry.get()
+    if name:
+        # 이름을 왼쪽 하단에 표시
+        left_listbox.insert(tk.END, name)
+        selected_images.clear()  # 오른쪽 구역 이미지 비우기
+        update_selected_images()
+
 # GUI 설정
 window = tk.Tk()
 window.title("이상형 월드컵 소프트웨어")
 window.geometry("1200x800")
 
-# 타이틀 입력란
-title_label = tk.Label(window, text="대회 타이틀 입력", font=("Arial", 14))
+# 화면을 3개 구역으로 나누기 위한 프레임들
+left_frame = tk.Frame(window, width=300, height=800, bg="lightgray")
+left_frame.pack(side="left", fill="y")
+
+center_frame = tk.Frame(window, width=600, height=800)
+center_frame.pack(side="left", fill="y")
+
+right_frame = tk.Frame(window, width=300, height=800)
+right_frame.pack(side="left", fill="y")
+
+# 왼쪽 구역 상단: 저장된 이상형 월드컵 목록
+saved_label = tk.Label(left_frame, text="저장된 이상형 월드컵 목록", font=("Arial", 14))
+saved_label.pack(pady=10)
+
+left_listbox = tk.Listbox(left_frame, height=10, width=25, font=("Arial", 12))
+left_listbox.pack(padx=20, pady=10)
+
+# 왼쪽 구역 하단: 사진 이름
+photo_label = tk.Label(left_frame, text="저장된 사진 이름", font=("Arial", 14))
+photo_label.pack(pady=10)
+
+# 중앙 구역
+title_label = tk.Label(center_frame, text="대회 타이틀 입력", font=("Arial", 14))
 title_label.pack(pady=10)
-title_entry = tk.Entry(window, font=("Arial", 12))
+
+title_entry = tk.Entry(center_frame, font=("Arial", 12))
 title_entry.pack(pady=5)
 
-# 후보 목록
-listbox_label = tk.Label(window, text="후보 목록", font=("Arial", 14))
-listbox_label.pack(pady=10)
-
-# 후보 목록을 스크롤 가능하게 만들기 위해 Canvas와 Scrollbar 사용
-canvas = tk.Canvas(window)
-scrollbar = tk.Scrollbar(window, orient="vertical", command=canvas.yview)
-scrollable_frame = tk.Frame(canvas)
-
-# Canvas와 Scrollbar 연결
-canvas.configure(yscrollcommand=scrollbar.set)
-
-# 스크롤 영역에 프레임 추가
-scrollable_frame.bind(
-    "<Configure>",
-    lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
-)
-
-# 스크롤 가능한 영역에 프레임을 추가
-canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
-
-# Canvas와 Scrollbar 배치
-canvas.pack(side="left", fill="both", expand=True)
-scrollbar.pack(side="right", fill="y")
-
-# 이미지 미리보기
-candidate_preview_label = tk.Label(window, text="이미지 미리보기", font=("Arial", 12))
-candidate_preview_label.pack(pady=20)
-
-# 후보 추가 버튼
-add_button = tk.Button(window, text="여러 후보 이미지 추가", command=upload_images, font=("Arial", 14))
+# 후보 이미지 추가
+add_button = tk.Button(center_frame, text="여러 후보 이미지 추가", command=upload_images, font=("Arial", 14))
 add_button.pack(pady=10)
 
+# 라운드 선택 (라디오버튼)
+round_label = tk.Label(center_frame, text="라운드 선택", font=("Arial", 12))
+round_label.pack(pady=5)
+
+round_var = tk.StringVar(value="8")
+round_4_button = tk.Radiobutton(center_frame, text="4강", variable=round_var, value="4")
+round_4_button.pack(anchor="w")
+round_8_button = tk.Radiobutton(center_frame, text="8강", variable=round_var, value="8")
+round_8_button.pack(anchor="w")
+round_16_button = tk.Radiobutton(center_frame, text="16강", variable=round_var, value="16")
+round_16_button.pack(anchor="w")
+round_32_button = tk.Radiobutton(center_frame, text="32강", variable=round_var, value="32")
+round_32_button.pack(anchor="w")
+round_64_button = tk.Radiobutton(center_frame, text="64강", variable=round_var, value="64")
+round_64_button.pack(anchor="w")
+
 # 대회 시작 버튼
-start_button = tk.Button(window, text="대회 시작", command=start_tournament, font=("Arial", 14))
+start_button = tk.Button(center_frame, text="대회 시작", command=start_tournament, font=("Arial", 14))
 start_button.pack(pady=10)
 
-# 결과 표시
-result_label = tk.Label(window, text="", font=("Arial", 16))
-result_label.pack(pady=20)
+# 대회 저장 버튼
+save_button = tk.Button(center_frame, text="대회 저장", command=save_tournament, font=("Arial", 14))
+save_button.pack(pady=10)
+
+# 오른쪽 구역: 선택한 후보 이미지들 및 이름 입력
+right_label = tk.Label(right_frame, text="선택된 후보", font=("Arial", 14))
+right_label.pack(pady=10)
+
+selected_image_frame = tk.Frame(right_frame)
+selected_image_frame.pack(pady=10)
+
+# 사진 저장 버튼
+save_image_button = tk.Button(right_frame, text="사진 저장", command=lambda: save_image_to_left(selected_images[0], name_entry), font=("Arial", 14))
+save_image_button.pack(pady=10)
 
 # 실행
 window.mainloop()
