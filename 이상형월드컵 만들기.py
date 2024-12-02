@@ -98,56 +98,59 @@ def run_round(candidates_in_round):
 window = tk.Tk()
 window.title("이상형 월드컵 소프트웨어")
 
+# 윈도우 크기 설정
+window.geometry("1000x800")  # 창 크기를 1000x800으로 설정
+
 # 라운드 크기 설정
-tournament_size_label = tk.Label(window, text="대진표 크기 선택")
-tournament_size_label.pack()
+tournament_size_label = tk.Label(window, text="대진표 크기 선택", font=("Arial", 14))
+tournament_size_label.pack(pady=10)
 
 # 라운드 크기 선택 (8강, 16강, 32강, 64강)
 tournament_size_var = tk.IntVar()
 tournament_size_var.set(8)  # 기본값 8강
-tournament_size_8 = tk.Radiobutton(window, text="8강", variable=tournament_size_var, value=8)
+tournament_size_8 = tk.Radiobutton(window, text="8강", variable=tournament_size_var, value=8, font=("Arial", 12))
 tournament_size_8.pack()
-tournament_size_16 = tk.Radiobutton(window, text="16강", variable=tournament_size_var, value=16)
+tournament_size_16 = tk.Radiobutton(window, text="16강", variable=tournament_size_var, value=16, font=("Arial", 12))
 tournament_size_16.pack()
-tournament_size_32 = tk.Radiobutton(window, text="32강", variable=tournament_size_var, value=32)
+tournament_size_32 = tk.Radiobutton(window, text="32강", variable=tournament_size_var, value=32, font=("Arial", 12))
 tournament_size_32.pack()
-tournament_size_64 = tk.Radiobutton(window, text="64강", variable=tournament_size_var, value=64)
+tournament_size_64 = tk.Radiobutton(window, text="64강", variable=tournament_size_var, value=64, font=("Arial", 12))
 tournament_size_64.pack()
 
 # 라운드 크기 설정 버튼
-set_size_button = tk.Button(window, text="대진표 크기 설정", command=set_tournament_size)
-set_size_button.pack()
+set_size_button = tk.Button(window, text="대진표 크기 설정", command=set_tournament_size, font=("Arial", 12))
+set_size_button.pack(pady=20)
 
 # 후보 추가 UI
-name_label = tk.Label(window, text="후보 이름 입력")
-name_label.pack()
-name_entry = tk.Entry(window)
-name_entry.pack()
+name_label = tk.Label(window, text="후보 이름 입력", font=("Arial", 14))
+name_label.pack(pady=10)
+name_entry = tk.Entry(window, font=("Arial", 12))
+name_entry.pack(pady=5)
 
-add_button = tk.Button(window, text="후보 추가", command=add_candidate)
-add_button.pack()
+add_button = tk.Button(window, text="후보 추가", command=add_candidate, font=("Arial", 12))
+add_button.pack(pady=10)
 
 # 후보 리스트
-listbox = tk.Listbox(window)
-listbox.pack()
+listbox = tk.Listbox(window, font=("Arial", 12), height=10, width=50)
+listbox.pack(pady=10)
 
 # 대진표 시작
-start_button = tk.Button(window, text="대진표 시작", command=start_tournament)
-start_button.pack()
+start_button = tk.Button(window, text="대진표 시작", command=start_tournament, font=("Arial", 14))
+start_button.pack(pady=20)
 
 # 라운드 표시
-round_display = tk.Label(window, text="0라운드")
-round_display.pack()
+round_display = tk.Label(window, text="0라운드", font=("Arial", 16))
+round_display.pack(pady=10)
 
 # 결과 라벨
-result_label = tk.Label(window, text="")
-result_label.pack()
+result_label = tk.Label(window, text="", font=("Arial", 16))
+result_label.pack(pady=10)
 
 # 후보자 이미지 표시
 candidate1_label = tk.Label(window)
-candidate1_label.pack(side=tk.LEFT, padx=20)
+candidate1_label.pack(side=tk.LEFT, padx=30, pady=20)
 
 candidate2_label = tk.Label(window)
-candidate2_label.pack(side=tk.LEFT, padx=20)
+candidate2_label.pack(side=tk.LEFT, padx=30, pady=20)
 
 window.mainloop()
