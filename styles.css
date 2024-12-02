@@ -1,68 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>이상형 월드컵</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header>
-        <div class="container">
-            <h1>이상형 월드컵   </h1>
-            <nav>
-                <ul>
-                    <li><a href="#" id="mypage-link">마이페이지</a></li>
-                    <li><a href="#" id="create-link" onclick="checkLogin()">이상형 월드컵 만들기</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-    
-    <main>
-        <div class="title-and-login">
-            <h2>당신의 이상형을 찾아보세요!</h2>
-            <div class="login-box">
-                <form id="login-form">
-                    <input type="text" placeholder="아이디" required>
-                    <input type="password" placeholder="비밀번호" required>
-                    <button type="submit">로그인</button>
-                </form>
-            </div>
-        </div>
-        <p>아래에서 인기 월드컵을 확인하거나 직접 만들어보세요.</p>
-    </main>
-    
-
-        <div class="worldcup-list">
-            <h3>인기 월드컵</h3>
-            <ul id="worldcup-items">
-                <!-- 여기서 동적으로 월드컵 항목이 추가됩니다 -->
-                <li>샘플 월드컵 1</li>
-                <li>샘플 월드컵 2</li>
-                <li>샘플 월드컵 3</li>
-            </ul>
-        </div>
-    </main>
-    <footer>
-        <p>© 2024 이상형 월드컵 | 만든 이: 에이원하조 </p>
-    </footer>
-
-    <script>
-        function checkLogin() {
-            const loggedIn = false; // 여기에 로그인 상태를 확인하는 논리를 추가하세요
-            if (!loggedIn) {
-                alert('로그인 후 이용 가능합니다!');
-                document.getElementById('login-link').focus();
-            } else {
-                window.location.href = "create.html"; // 이상형 월드컵 만들기 페이지로 이동
-            }
-        }
-    </script>
-</body>
-</html>
-
-/* 전체 스타일 초기화 */
+/* 공통 스타일 */
 * {
     margin: 0;
     padding: 0;
@@ -70,21 +6,24 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Nanum Gothic', sans-serif; /* 세련된 폰트 */
     background-color: #e0f7fa; /* 하늘색 배경 */
     color: #333;
+    line-height: 1.6;
 }
 
 header {
-    background-color: #4fb6c6; /* 하늘색 테마 */
-    padding: 10px 20px;
+    background-color: #4fb6c6;
+    padding: 15px 20px;
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-header h1 {
+header h1 a {
+    color: white;
+    text-decoration: none;
     font-size: 24px;
     font-weight: bold;
 }
@@ -92,7 +31,7 @@ header h1 {
 nav ul {
     list-style: none;
     display: flex;
-    gap: 15px;
+    gap: 30px; /* 버튼 간 거리 확대 */
 }
 
 nav ul li a {
@@ -106,54 +45,52 @@ nav ul li a:hover {
 }
 
 main {
-    padding: 20px;
+    padding: 40px 20px;
     text-align: center;
 }
 
-.welcome h2 {
-    font-size: 28px;
-    margin-bottom: 10px;
-}
-
-.welcome p {
-    font-size: 18px;
-    margin-bottom: 20px;
-}
-
-.container {
+.title-and-login {
     display: flex;
-    justify-content: space-between; /* 헤더 내 요소를 양쪽으로 배치 */
+    justify-content: space-between;
     align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.title-and-login h2 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    font-size: 2em;
+    font-weight: bold;
 }
 
 .login-box {
-    background-color: #ffffff; /* 흰색 배경 */
-    padding: 10px 15px;
+    background-color: #ffffff;
+    padding: 20px 15px;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    position: relative;
-    margin-left: auto; /* 오른쪽으로 정렬 */
-    width: 200px; /* 적당한 너비 설정 */
+    width: 220px;
 }
-
 
 .login-box form {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
 }
 
 .login-box input {
-    padding: 8px;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 14px;
 }
 
 .login-box button {
-    padding: 8px;
-    background-color: #00bcd4; /* 하늘색 버튼 */
+    padding: 10px;
+    background-color: #00bcd4;
     color: white;
     border: none;
     border-radius: 4px;
@@ -164,73 +101,54 @@ main {
     background-color: #008394;
 }
 
-
+/* 인기 월드컵 리스트 */
 .worldcup-list {
     background-color: #ffffff;
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 600px;
+    padding: 30px;
+    margin: 30px auto;
+    max-width: 800px; /* 넓이를 더 넓게 */
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .worldcup-list h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
+    font-size: 22px;
+    margin-bottom: 20px;
+    font-weight: bold;
 }
 
 .worldcup-list ul {
-    display: flex; /* 가로로 배치 */
-    gap: 10px; /* 항목 간 간격 */
+    display: flex;
+    gap: 20px;
     list-style: none;
     padding: 0;
-    justify-content: center; /* 중앙 정렬 */
+    justify-content: center;
 }
 
 .worldcup-list ul li {
-    flex: 1; /* 항목 크기를 동일하게 */
-    text-align: center; /* 텍스트 중앙 정렬 */
-    padding: 10px;
+    flex: 1;
+    text-align: center;
+    padding: 15px;
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #f9f9f9;
-    transition: transform 0.2s ease; /* 애니메이션 효과 */
+    transition: transform 0.2s ease;
+    font-size: 18px;
 }
 
 .worldcup-list ul li:hover {
-    transform: scale(1.05); /* 살짝 확대 */
-    background-color: #e0f7fa; /* 강조 색상 */
+    transform: scale(1.05);
+    background-color: #e0f7fa;
 }
 
 footer {
     background-color: #008394;
     color: white;
     text-align: center;
-    padding: 10px 0;
+    padding: 20px 0;
     margin-top: 20px;
 }
 
-.title-and-login {
-    display: flex;
-    justify-content: space-between; /* 양 끝으로 정렬 */
-    align-items: center; /* 세로 중앙 정렬 */
-    margin-bottom: 20px; /* 아래 여백 */
-    position: relative; /* 제목과 박스 정렬용 */
-}
-
-.title-and-login h2 {
-    position: absolute;
-    left: 50%; /* 화면의 50% 위치로 이동 */
-    transform: translateX(-50%); /* 가운데 정렬 보정 */
-    margin: 0; /* 기본 여백 제거 */
-    font-size: 1.5em; /* 제목 크기 */
-}
-
-.login-box {
-    background-color: #ffffff; /* 흰색 배경 */
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 200px; /* 너비 */
+footer p {
+    margin: 5px 0; /* 간격을 조정 */
 }
