@@ -49,8 +49,15 @@ def start_tournament():
     if len(candidates) < total_candidates:
         result_label.config(text=f"{total_candidates}명의 후보가 필요합니다!")
         return
-    random.shuffle(candidates)  # 후보들을 무작위로 섞기
-    next_round_candidates = [candidates[i] for i in range(len(candidates))]
+    
+    # 후보 수가 많으면 무작위로 8명만 추출
+    if len(candidates) > total_candidates:
+        candidates_selected = random.sample(candidates, total_candidates)
+    else:
+        candidates_selected = candidates
+
+    random.shuffle(candidates_selected)  # 후보들을 무작위로 섞기
+    next_round_candidates = [candidates_selected[i] for i in range(len(candidates_selected))]
     run_round(next_round_candidates)
 
 # 라운드 진행 함수
