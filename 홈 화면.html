@@ -1,64 +1,24 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>이상형 월드컵</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <header>
-        <div class="container">
-            <h1><a href="#" id="home-link">이상형 월드컵</a></h1>
-            <nav>
-                <ul>
-                    <li><a href="#" id="home-link">홈</a></li>
-                    <li><a href="#" id="mypage-link">마이페이지</a></li>
-                    <li><a href="#" id="create-link" onclick="checkLogin()">이상형 월드컵 만들기</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-    
-    <main>
-        <div class="title-and-login">
-            <h2>당신의 이상형을 찾아보세요!</h2>
-            <div class="login-box">
-                <form id="login-form">
-                    <input type="text" placeholder="아이디" required>
-                    <input type="password" placeholder="비밀번호" required>
-                    <button type="submit">로그인</button>
-                </form>
-            </div>
-        </div>
-        <p>아래에서 인기 월드컵을 확인하거나 직접 만들어보세요.</p>
-
-        <div class="worldcup-list">
-            <h3>인기 월드컵</h3>
-            <ul id="worldcup-items">
-                <li>샘플 월드컵 1</li>
-                <li>샘플 월드컵 2</li>
-                <li>샘플 월드컵 3</li>
-            </ul>
-        </div>
-    </main>
-    
-    <footer>
-        <p>© 2024 이상형 월드컵</p>
-        <p>만든 이: 에이원하조</p>
-    </footer>
-
-    <script>
-        function checkLogin() {
-            const loggedIn = false; // 여기에 로그인 상태를 확인하는 논리를 추가하세요
-            if (!loggedIn) {
-                alert('로그인 후 이용 가능합니다!');
-                document.getElementById('login-link').focus();
-            } else {
-                window.location.href = "create.html"; // 이상형 월드컵 만들기 페이지로 이동
-            }
+<script>
+    // 마이페이지 링크 클릭 시 로그인 확인
+    document.getElementById("mypage-link").addEventListener("click", function (event) {
+        const loggedIn = localStorage.getItem("loggedIn");
+        if (!loggedIn) {
+            alert("로그인 후 이용 가능합니다!");
+            event.preventDefault(); // 기본 링크 이동 방지
+            document.getElementById("login-form").querySelector("input[type='text']").focus();
+        } else {
+            window.location.href = "mypage.html"; // 마이페이지로 이동
         }
-    </script>
-</body>
-</html>
+    });
+
+    // 이상형 월드컵 만들기 링크 클릭 시 로그인 확인 (기존 코드 수정)
+    function checkLogin() {
+        const loggedIn = localStorage.getItem("loggedIn");
+        if (!loggedIn) {
+            alert("로그인 후 이용 가능합니다!");
+            document.getElementById("login-form").querySelector("input[type='text']").focus();
+        } else {
+            window.location.href = "create.html"; // 월드컵 만들기 페이지로 이동
+        }
+    }
+</script>
