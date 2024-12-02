@@ -1,0 +1,172 @@
+/* 전체 스타일 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #e0f7fa; /* 하늘색 배경 */
+    color: #333;
+}
+
+header {
+    background-color: #4fb6c6; /* 하늘색 테마 */
+    padding: 10px 20px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+main {
+    padding: 20px;
+    text-align: center;
+}
+
+.welcome h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.welcome p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between; /* 헤더 내 요소를 양쪽으로 배치 */
+    align-items: center;
+}
+
+.login-box {
+    background-color: #ffffff; /* 흰색 배경 */
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    margin-left: auto; /* 오른쪽으로 정렬 */
+    width: 200px; /* 적당한 너비 설정 */
+}
+
+
+.login-box form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.login-box input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.login-box button {
+    padding: 8px;
+    background-color: #00bcd4; /* 하늘색 버튼 */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.login-box button:hover {
+    background-color: #008394;
+}
+
+
+.worldcup-list {
+    background-color: #ffffff;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.worldcup-list h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.worldcup-list ul {
+    display: flex; /* 가로로 배치 */
+    gap: 10px; /* 항목 간 간격 */
+    list-style: none;
+    padding: 0;
+    justify-content: center; /* 중앙 정렬 */
+}
+
+.worldcup-list ul li {
+    flex: 1; /* 항목 크기를 동일하게 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    transition: transform 0.2s ease; /* 애니메이션 효과 */
+}
+
+.worldcup-list ul li:hover {
+    transform: scale(1.05); /* 살짝 확대 */
+    background-color: #e0f7fa; /* 강조 색상 */
+}
+
+footer {
+    background-color: #008394;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 20px;
+}
+
+.title-and-login {
+    display: flex;
+    justify-content: space-between; /* 양 끝으로 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    margin-bottom: 20px; /* 아래 여백 */
+    position: relative; /* 제목과 박스 정렬용 */
+}
+
+.title-and-login h2 {
+    position: absolute;
+    left: 50%; /* 화면의 50% 위치로 이동 */
+    transform: translateX(-50%); /* 가운데 정렬 보정 */
+    margin: 0; /* 기본 여백 제거 */
+    font-size: 1.5em; /* 제목 크기 */
+}
+
+.login-box {
+    background-color: #ffffff; /* 흰색 배경 */
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 200px; /* 너비 */
+}
