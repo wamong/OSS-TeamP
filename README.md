@@ -12,7 +12,9 @@ ___
 4. 완성 후 다른 사용자들과 자신이 만든 월드컵을 공유하며 서로의 취향을 알아갑니다.
 ___
 ## 담당 👤
-종복, 명진 - 이상형 월드컵 만들기 툴 제작 🔧<br>
-유진, 정인 - 웹사이트 html로 제작 🖱<br>
-민서, 순규 - 예시 월드컵 제작 및 자료조사 📷<br>
-수민 - 깃허브 관리 및 정리 ⚙<br>
+|이름|역할|
+|--|--|
+|[종복](https://github.com/JONGBOK1), [명진](https://github.com/wamong)|이상형 월드컵 만들기 툴 제작 🔧|
+|[유진](https://github.com/jojeongin313), [정인](https://github.com/jojeongin313)|웹사이트 html로 제작 🖱|
+|[민서](https://github.com/alstj003), [순규](https://github.com/soon15)|예시 월드컵 제작 및 자료조사 📷|
+|[수민](https://github.com/jinsumin81)|깃허브 관리 및 정리 ⚙|
