@@ -22,12 +22,11 @@
             </div>
         </div>
     </header>
-    
     <main>
         <h2>마이페이지</h2>
         <div class="mypage">
             <div class="profile-photo">
-                <img id="imgThumb" src="https://static.nid.naver.com/images/web/user/default.png" alt="프로필 사진">
+                <img src="profile.jpg" alt="프로필 사진">
             </div>
 
             <div class="info">
@@ -43,83 +42,5 @@
         <p>© 2024 이상형 월드컵</p>
         <p>만든 이: 에이원하조</p>
     </footer>
-
-
-<script>
-    // 가상 유저 데이터 (서버와 연결 시 실제 DB로 대체)
-    const fakeUsers = [
-        { username: "asbm", password: "1234" },
-        { username: "example", password: "5678" },
-    ];
-
-    // DOM 요소 참조
-    const loginForm = document.getElementById("login-form");
-    const profileInfo = document.getElementById("profile-info");
-    const loginBox = document.getElementById("login-box");
-
-    // 페이지 로드 시 로그인 상태 확인
-    document.addEventListener("DOMContentLoaded", function () {
-        const isLoggedIn = localStorage.getItem("loggedIn");
-        const username = localStorage.getItem("username");
-
-        if (isLoggedIn) {
-            // 로그인 상태
-            showProfile(username);
-        } else {
-            // 비로그인 상태
-            loginForm.style.display = "block";
-            profileInfo.style.display = "none";
-        }
-    });
-
-    // 로그인 폼 동작 추가
-    loginForm.addEventListener("submit", function (event) {
-        event.preventDefault(); // 기본 폼 동작 방지
-
-        // 입력된 유저 데이터 읽기
-        const username = this.querySelector("input[type='text']").value;
-        const password = this.querySelector("input[type='password']").value;
-
-        // 로그인 여부 확인
-        const user = fakeUsers.find((u) => u.username === username && u.password === password);
-        if (user) {
-            alert("로그인 성공!");
-            localStorage.setItem("loggedIn", true); // 로그인 상태 저장
-            localStorage.setItem("username", username);
-            showProfile(username); // 로그인 UI 표시
-        } else {
-            alert("아이디 또는 비밀번호가 올바르지 않습니다.");
-        }
-    });
-
-    // 프로필 UI 표시
-    function showProfile(username) {
-        loginForm.style.display = "none";
-        profileInfo.style.display = "block";
-        document.getElementById("nickname").textContent = username || "골라조";
-        document.getElementById("profile-img").src = "#"; // 기본 사진 경로
-    }
-
-    // 월드컵 만들기 접근 시 로그인 확인
-    function checkLogin() {
-        const isLoggedIn = localStorage.getItem("loggedIn");
-        if (!isLoggedIn) {
-            alert("로그인 후 이용 가능합니다.");
-        } else {
-            alert("이상형 월드컵 만들기 페이지로 이동합니다!");
-        }
-    }
-</script>
-
-<script>
-    // 로그아웃 버튼 동작 추가
-    document.getElementById("logout-button").addEventListener("click", function () {
-        localStorage.removeItem("loggedIn"); // 로그인 상태 삭제
-        localStorage.removeItem("username"); // 유저 정보 삭제
-        alert("로그아웃 되었습니다.");
-        location.reload(); // 페이지 새로고침으로 비로그인 상태로 변경
-    });
-</script>
-
 </body>
 </html>
