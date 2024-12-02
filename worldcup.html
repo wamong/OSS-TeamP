@@ -12,163 +12,147 @@
       background-color: #f8f9fa;
       padding: 20px;
     }
-    .hidden {
-      display: none;
+    .candidate-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
     }
     .candidate-card {
-      text-align: center;
-      margin-bottom: 20px;
+      width: 150px;
+      height: 150px;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid transparent;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.3s, border-color 0.3s;
     }
     .candidate-card img {
       width: 100%;
-      max-width: 150px;
-      border-radius: 10px;
+      height: 100%;
+      object-fit: cover;
     }
-    .step {
-      display: none;
+    .candidate-card.selected {
+      transform: scale(1.1);
+      border-color: #007bff;
     }
-    .step.active {
-      display: block;
-    }
-    #tournament-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    .selected-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       gap: 20px;
+      margin: 20px 0;
     }
-    #round-selection button {
-      width: 100%;
+    .selected-container .candidate-card {
+      transform: scale(1.2);
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .btn-next-round {
+      display: none;
+      margin-top: 20px;
+    }
+    .btn-next-round.active {
+      display: inline-block;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1 class="text-center my-4">이상형 월드컵 생성기</h1>
+    <h1 class="text-center my-4">이상형 월드컵</h1>
 
-    <!-- Step 1: 후보 사진 업로드 -->
-    <div id="step-upload" class="step active">
-      <h2>1. 후보 사진 업로드</h2>
-      <input type="file" id="candidate-photo" accept="image/*" multiple class="form-control my-3" />
-      <button class="btn btn-primary w-100" onclick="saveCandidates()">후보 저장</button>
-    </div>
-
-    <!-- Step 2: 후보 이름 입력 -->
-    <div id="step-candidate" class="step">
-      <h2>2. 후보 이름 입력</h2>
-      <div id="candidate-list"></div>
-      <button class="btn btn-success w-100" onclick="saveCandidateNames()">후보 이름 저장</button>
-    </div>
-
-    <!-- Step 3: 대회 타이틀 입력 -->
-    <div id="step-title" class="step">
-      <h2>3. 대회 타이틀 입력</h2>
-      <input type="text" id="tournament-title" class="form-control my-3" placeholder="대회 타이틀 입력" />
-      <button class="btn btn-primary w-100" onclick="saveTournament()">대회 저장</button>
-    </div>
-
-    <!-- Step 4: 강 수 선택 -->
-    <div id="step-round" class="step">
-      <h2>4. 강 수 선택</h2>
-      <select id="rounds" class="form-select my-3">
-        <option value="4">4강</option>
-        <option value="8">8강</option>
-        <option value="16">16강</option>
-        <option value="32">32강</option>
-        <option value="64">64강</option>
-      </select>
-      <button class="btn btn-success w-100" onclick="startTournament()">대회 시작</button>
-    </div>
-
-    <!-- Step 5: 대회 진행 -->
-    <div id="step-main" class="step">
-      <h2 id="tournament-title-display">대회 진행 중...</h2>
-      <div id="tournament-container"></div>
-      <button class="btn btn-primary mt-3" onclick="playNextRound()">다음 라운드 진행</button>
-    </div>
+    <!-- 대회 진행 -->
+    <div id="tournament-container" class="candidate-container"></div>
+    <div id="selected-container" class="selected-container"></div>
+    <button id="next-round-btn" class="btn btn-primary btn-next-round" onclick="playNextRound()">다음 라운드 진행</button>
   </div>
 
   <script>
-    let candidates = [];
-    let tournament = { title: '', rounds: 0, currentRound: [] };
-    let currentStep = 0;
+    let tournament = {
+      title: '이상형 월드컵',
+      currentRound: [],
+      nextRound: [],
+    };
 
-    function showStep(step) {
-      document.querySelectorAll('.step').forEach((el, idx) => {
-        el.classList.toggle('active', idx === step);
-      });
-    }
-
-    function saveCandidates() {
-      const files = document.getElementById('candidate-photo').files;
-      candidates = Array.from(files).map(file => ({ photo: file, name: '' }));
-      
-      const candidateList = document.getElementById('candidate-list');
-      candidateList.innerHTML = '';
-
-      candidates.forEach((candidate, index) => {
-        const div = document.createElement('div');
-        div.className = 'candidate-card';
-        div.innerHTML = `
-          <img src="${URL.createObjectURL(candidate.photo)}" alt="후보 사진">
-          <input type="text" class="form-control my-2" placeholder="후보 이름" data-index="${index}">
-        `;
-        candidateList.appendChild(div);
-      });
-
-      currentStep++;
-      showStep(currentStep);
-    }
-
-    function saveCandidateNames() {
-      document.querySelectorAll('#candidate-list input').forEach(input => {
-        const index = input.dataset.index;
-        candidates[index].name = input.value || `후보 ${+index + 1}`;
-      });
-
-      currentStep++;
-      showStep(currentStep);
-    }
-
-    function saveTournament() {
-      tournament.title = document.getElementById('tournament-title').value || '무제 월드컵';
-      currentStep++;
-      showStep(currentStep);
-    }
+    // 예제 후보
+    const candidates = [
+      { name: '후보 1', photo: 'https://via.placeholder.com/150' },
+      { name: '후보 2', photo: 'https://via.placeholder.com/150' },
+      { name: '후보 3', photo: 'https://via.placeholder.com/150' },
+      { name: '후보 4', photo: 'https://via.placeholder.com/150' },
+    ];
 
     function startTournament() {
-      tournament.rounds = parseInt(document.getElementById('rounds').value, 10);
       tournament.currentRound = [...candidates];
-      tournament.currentRound.length = tournament.rounds; // 강 수에 맞게 자르기
-      currentStep++;
-      document.getElementById('tournament-title-display').textContent = `${tournament.title} (${tournament.rounds}강)`;
-      showTournament();
-      showStep(currentStep);
+      renderCandidates();
     }
 
-    function showTournament() {
+    function renderCandidates() {
       const container = document.getElementById('tournament-container');
+      const selectedContainer = document.getElementById('selected-container');
       container.innerHTML = '';
-      tournament.currentRound.forEach(candidate => {
+      selectedContainer.innerHTML = '';
+
+      tournament.currentRound.forEach((candidate, index) => {
         const div = document.createElement('div');
         div.className = 'candidate-card';
+        div.dataset.index = index;
         div.innerHTML = `
-          <img src="${URL.createObjectURL(candidate.photo)}" alt="${candidate.name}">
-          <p>${candidate.name}</p>
+          <img src="${candidate.photo}" alt="${candidate.name}">
         `;
+        div.onclick = () => selectCandidate(index);
         container.appendChild(div);
       });
     }
 
-    function playNextRound() {
-      tournament.currentRound = tournament.currentRound.slice(0, Math.ceil(tournament.currentRound.length / 2)); // 예선 통과
-      if (tournament.currentRound.length === 1) {
-        alert(`${tournament.currentRound[0].name} 우승!`);
-        location.reload(); // 초기화
-      } else {
-        showTournament();
+    function selectCandidate(index) {
+      const selectedCards = document.querySelectorAll('.candidate-card.selected');
+      if (selectedCards.length >= 2) return; // 최대 2장만 선택 가능
+
+      const card = document.querySelector(`.candidate-card[data-index="${index}"]`);
+      if (!card.classList.contains('selected')) {
+        card.classList.add('selected');
+        moveToSelected(index);
       }
     }
 
-    showStep(currentStep);
+    function moveToSelected(index) {
+      const candidate = tournament.currentRound[index];
+      const selectedContainer = document.getElementById('selected-container');
+      const div = document.createElement('div');
+      div.className = 'candidate-card';
+      div.innerHTML = `
+        <img src="${candidate.photo}" alt="${candidate.name}">
+      `;
+      selectedContainer.appendChild(div);
+
+      // 2장 선택 시 다음 라운드 버튼 활성화
+      if (selectedContainer.children.length === 2) {
+        document.getElementById('next-round-btn').classList.add('active');
+      }
+    }
+
+    function playNextRound() {
+      const selectedContainer = document.getElementById('selected-container');
+      const selectedCards = Array.from(selectedContainer.children);
+
+      // 다음 라운드에 선택된 후보 추가
+      tournament.nextRound = selectedCards.map(card => {
+        const img = card.querySelector('img');
+        const name = img.alt;
+        const photo = img.src;
+        return { name, photo };
+      });
+
+      // 다음 라운드로 전환
+      tournament.currentRound = [...tournament.nextRound];
+      tournament.nextRound = [];
+      document.getElementById('next-round-btn').classList.remove('active');
+      renderCandidates();
+    }
+
+    // 대회 시작
+    startTournament();
   </script>
 </body>
 </html>
