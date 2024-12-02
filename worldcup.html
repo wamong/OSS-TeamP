@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이상형 월드컵 생성기</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+    }
+    h2 {
+      margin-top: 30px;
+    }
+    img {
+      display: block;
+      margin-bottom: 10px;
+    }
+    input, select, button {
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      cursor: pointer;
+    }
+    #candidate-list div {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>이상형 월드컵 생성기</h1>
+
+  <!-- 1. 후보 사진 업로드 -->
+  <div id="upload-section">
+    <h2>후보 사진 업로드</h2>
+    <input type="file" id="candidate-photo" accept="image/*" multiple />
+    <button onclick="saveCandidates()">후보 저장</button>
+  </div>
+
+  <!-- 2. 후보 이름 입력 -->
+  <div id="candidate-section" style="display: none;">
+    <h2>후보 이름 입력</h2>
+    <div id="candidate-list"></div>
+    <button onclick="saveCandidateNames()">후보 이름 저장</button>
+  </div>
+
+  <!-- 3. 대회 타이틀 입력 -->
+  <div id="title-section" style="display: none;">
+    <h2>대회 타이틀 입력</h2>
+    <input type="text" id="tournament-title" placeholder="대회 타이틀 입력" />
+    <button onclick="saveTournament()">대회 저장</button>
+  </div>
+
+  <!-- 4. 저장된 이상형 월드컵 목록 -->
+  <div id="saved-tournaments" style="display: none;">
+    <h2>저장된 이상형 월드컵</h2>
+    <ul id="tournament-list"></ul>
+  </div>
+
+  <!-- 5. 강 수 선택 및 대회 시작 -->
+  <div id="round-selection" style="display: none;">
+    <h2>강 수 선택</h2>
+    <select id="rounds">
+      <option value="4">4강</option>
+      <option value="8">8강</option>
+      <option value="16">16강</option>
+    </select>
+    <button onclick="startTournament()">대회 시작</button>
+  </div>
+
+  <!-- 6. 메인 페이지 -->
+  <div id="main-page" style="display: none;">
+    <h1>메인 페이지</h1>
+    <div id="uploaded-tournaments"></div>
+  </div>
+
+  <script>
+    let candidates = [];
+    let tournament = { title: '', rounds: 0 };
+
+    function saveCandidates() {
+      const files = document.getElementById('candidate-photo').files;
+      candidates = Array.from(files).map(file => ({ photo: file, name: '' }));
+
+      const candidateList = document.getElementById('candidate-list');
+      candidateList.innerHTML = '';
+
+      candidates.forEach((candidate, index) => {
+        const div = document.createElement('div');
+        div.innerHTML = `
+          <img src="${URL.createObjectURL(candidate.photo)}" alt="후보 사진" style="width: 100px;">
+          <input type="text" placeholder="후보 이름" data-index="${index}">
+        `;
+        candidateList.appendChild(div);
+      });
+
+      document.getElementById('candidate-section').style.display = 'block';
+    }
+
+    function saveCandidateNames() {
+      const inputs = document.querySelectorAll('#candidate-list input');
+      inputs.forEach(input => {
+        const index = input.dataset.index;
+        candidates[index].name = input.value;
+      });
+      alert('후보 이름이 저장되었습니다.');
+      document.getElementById('title-section').style.display = 'block';
+    }
+
+    function saveTournament() {
+      const title = document.getElementById('tournament-title').value;
+      tournament.title = title;
+      alert('대회가 저장되었습니다.');
+
+      const list = document.getElementById('tournament-list');
+      list.innerHTML = `<li>${tournament.title}</li>`;
+      document.getElementById('saved-tournaments').style.display = 'block';
+      document.getElementById('round-selection').style.display = 'block';
+    }
+
+    function startTournament() {
+      tournament.rounds = document.getElementById('rounds').value;
+      alert(`"${tournament.title}" 대회가 ${tournament.rounds}강으로 시작됩니다!`);
+      uploadToMainPage();
+    }
+
+    function uploadToMainPage() {
+      const main = document.getElementById('uploaded-tournaments');
+      const div = document.createElement('div');
+      div.innerHTML = `
+        <h3>${tournament.title} (${tournament.rounds}강)</h3>
+        <button onclick="playTournament()">대회 진행</button>
+      `;
+      main.appendChild(div);
+
+      document.getElementById('main-page').style.display = 'block';
+    }
+
+    function playTournament() {
+      alert('대회 진행 기능은 준비 중입니다!');
+    }
+  </script>
+</body>
+</html>
