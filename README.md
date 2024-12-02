@@ -1,4 +1,4 @@
-# Project : CIW(Create Ideal type World cup) (👩🏻❤
+# Project : CIW(Create Ideal type World cup) 👩🏻❤
 ___
 ## 목적 🔎
 이상형 월드컵을 직접 생성함으로써 자신이 알고 싶은 분야에 대한 사람들의 수요를 알 수 있습니다.<br><br>
