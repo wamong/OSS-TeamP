@@ -28,7 +28,10 @@ def add_candidate():
     if name and image:
         candidates.append({'name': name, 'image': image, 'image_path': image_path})
         listbox.insert(tk.END, name)  # 후보 리스트 박스에 이름 추가
+        candidate_preview_label.config(image=image)  # 이미지 미리보기 업데이트
+        candidate_preview_label.image = image  # 이미지 참조를 유지
         name_entry.delete(0, tk.END)  # 이름 입력란 초기화
+        update_candidates_list()
 
 # 대진표 크기 설정 (8강, 16강, 32강, 64강)
 def set_tournament_size():
@@ -198,12 +201,18 @@ tournament_size_8.pack()
 tournament_size_16 = tk.Radiobutton(window, text="16강", variable=tournament_size_var, value=16, font=("Arial", 12))
 tournament_size_16.pack()
 tournament_size_32 = tk.Radiobutton(window, text="32강", variable=tournament_size_var, value=32, font=("Arial", 12))
-
-# 대진표 크기 설정 (32강, 64강)
+tournament_size_32.pack()
 tournament_size_64 = tk.Radiobutton(window, text="64강", variable=tournament_size_var, value=64, font=("Arial", 12))
 tournament_size_64.pack()
 
-# 대회 제목 및 후보 추가 관련 UI
+# 대회 시작 및 저장 버튼
+start_button = tk.Button(window, text="대회 시작", command=start_tournament, font=("Arial", 14))
+start_button.pack(pady=10)
+
+save_button = tk.Button(window, text="대회 저장", command=save_tournament, font=("Arial", 14))
+save_button.pack(pady=10)
+
+# 후보 추가 관련 UI
 add_candidate_button = tk.Button(window, text="후보 추가", command=add_candidate, font=("Arial", 14))
 add_candidate_button.pack(pady=10)
 
@@ -213,13 +222,9 @@ name_label.pack(pady=10)
 name_entry = tk.Entry(window, font=("Arial", 12))
 name_entry.pack(pady=5)
 
-# 대회 시작 버튼
-start_button = tk.Button(window, text="대회 시작", command=start_tournament, font=("Arial", 14))
-start_button.pack(pady=10)
-
-# 대회 저장 버튼
-save_button = tk.Button(window, text="대회 저장", command=save_tournament, font=("Arial", 14))
-save_button.pack(pady=10)
+# 이미지 미리보기 영역
+candidate_preview_label = tk.Label(window, text="이미지 미리보기", font=("Arial", 12))
+candidate_preview_label.pack(pady=20)
 
 # 저장된 대회 목록 UI (왼쪽에 표시)
 tournament_listbox_label = tk.Label(window, text="저장된 대회들", font=("Arial", 14))
@@ -228,22 +233,20 @@ tournament_listbox_label.pack(pady=10)
 tournament_listbox = tk.Listbox(window, height=10, width=30, font=("Arial", 12))
 tournament_listbox.pack(side=tk.LEFT, padx=20, pady=10)
 
-# 저장된 대회를 클릭했을 때 대회 불러오기
-tournament_listbox.bind("<Double-1>", load_tournament_from_list)
+# 후보 이름 나열 목록
+listbox_label = tk.Label(window, text="후보 목록", font=("Arial", 14))
+listbox_label.pack(pady=10)
 
-# 후보 이미지 및 이름 표시
-candidate1_label = tk.Label(window, text="", font=("Arial", 12))
-candidate1_label.pack(pady=10)
-
-candidate2_label = tk.Label(window, text="", font=("Arial", 12))
-candidate2_label.pack(pady=10)
-
-round_display = tk.Label(window, text="", font=("Arial", 14))
-round_display.pack(pady=20)
+listbox = tk.Listbox(window, height=10, width=30, font=("Arial", 12))
+listbox.pack(side=tk.LEFT, padx=20, pady=10)
 
 # 결과 표시
 result_label = tk.Label(window, text="", font=("Arial", 16))
 result_label.pack(pady=20)
+
+# 대회 불러오기
+load_button = tk.Button(window, text="대회 불러오기", command=load_saved_tournaments, font=("Arial", 14))
+load_button.pack(pady=10)
 
 # 실행
 window.mainloop()
