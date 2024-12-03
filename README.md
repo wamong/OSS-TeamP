@@ -26,11 +26,9 @@ ___
 |--|--|--|
 |[종복](https://github.com/JONGBOK1)|이상형 월드컵 만들기 툴 제작 🔧|,
 |[명진](https://github.com/wamong)|이상형 월드컵 만들기 툴 제작 🔧|,
-|[유진](https://github.com/jojeongin313)|총괄😎|, 
+|[유진](https://github.com/jojeongin313)|웹사이트 html로 제작 🖱|, 
 |[정인](https://github.com/jojeongin313)|웹사이트 html로 제작 🖱|,
 |[민서](https://github.com/alstj003)|예시 월드컵 제작 및 자료조사 📷|, 
 |[순규](https://github.com/soon15)|예시 월드컵 제작 및 자료조사 📷|,
 |[수민](https://github.com/jinsumin81)|깃허브 관리 및 정리 ⚙|,
-___
-## 전체적인 제작 과정 
-1. 1차 회의
+
