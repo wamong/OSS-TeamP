@@ -118,14 +118,31 @@ padding-left: 20%;}
 }
 
 /* 푸터 스타일 */
-footer {width:100%;
-    position: absolute;
-    background-color: #008394;
+footer { background-color: #008394;
     color: white;
     text-align: center;
     padding: 20px;
     margin-top: 40px;
-    bottom: 0;
 
 }
 
+.info-past ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .info-past li {
+    margin-bottom: 10px;
+  }
+  
+  .info-past a {
+    text-decoration: none;
+    color: #4fb6c6;
+  }
+  
+  .info-past a:hover {
+    text-decoration: underline;
+  }
+  .info-past h2 {
+    color: #397d88;
+  }
