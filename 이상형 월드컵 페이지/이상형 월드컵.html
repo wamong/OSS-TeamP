@@ -180,9 +180,16 @@
 
     function saveTournament() {
       tournament.title = document.getElementById('tournament-title').value || '무제 월드컵';
+  
+  // 로컬 스토리지에 저장
+      const savedTournaments = JSON.parse(localStorage.getItem('tournaments')) || [];
+      savedTournaments.push({ title: tournament.title, link: '#'}); // 링크는 필요에 따라 설정
+      localStorage.setItem('tournaments', JSON.stringify(savedTournaments));
+  
       currentStep++;
       showStep(currentStep);
     }
+
 
     function startTournament() {
       tournament.rounds = parseInt(document.getElementById('rounds').value, 10);
