@@ -34,6 +34,11 @@
                 <div class="info-ex"><h2>닉네임</h2><p>gollajo</p></div>
                 <div class="info-past"></div>
             </ul>
+            <div class="info-past">
+                <h2>내가 만든 월드컵</h2>
+                <ul id="tournament-list"></ul>
+              </div>
+              
         </div>
         </div>
     </main>
@@ -42,5 +47,21 @@
         <p>© 2024 이상형 월드컵</p>
         <p>만든 이: 골라조</p>
     </footer>
+    <script>
+        // 로컬 스토리지에서 데이터 가져오기
+        const savedTournaments = JSON.parse(localStorage.getItem('tournaments')) || [];
+        const tournamentList = document.getElementById('tournament-list');
+        
+        if (savedTournaments.length === 0) {
+          tournamentList.innerHTML = '<li>생성된 월드컵이 없습니다.</li>';
+        } else {
+          savedTournaments.forEach(tournament => {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `<a href="${tournament.link}">${tournament.title}</a>`;
+            tournamentList.appendChild(listItem);
+          });
+        }
+      </script>
+      
 </body>
 </html>
